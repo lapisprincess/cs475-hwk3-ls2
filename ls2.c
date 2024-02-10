@@ -45,6 +45,8 @@ int _ls2(struct stack_t *outstack, char *path, char *pattern, int pat_srch, int 
                 push(outstack, str);
                 _ls2(outstack, full_path, pattern, pat_srch, lvl + 1);
             } else if (_ls2(outstack, full_path, pattern, pat_srch, lvl + 1) == 1) {
+                // if it wasn't 11:00pm on a Friday, I might try to get the full path...
+                // but alas, you'll have to deal with my half-assery. sorry!
                 push(outstack, str);
             }
         } else if (S_ISREG(buf.st_mode)) { // regular file
