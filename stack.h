@@ -22,5 +22,6 @@ void* pop(stack_t* s);
 void push(stack_t* s, void* item);
 void freestack(stack_t* s);
 void printstack(stack_t* s);
+void flipstack(stack_t *s);
 
 #endif

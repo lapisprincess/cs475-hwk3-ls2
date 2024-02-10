@@ -9,7 +9,7 @@
 int ls2(char *path, char *pattern, int pat_srch) {
     struct stack_t *outstack = initstack();
     _ls2(outstack, path, pattern, pat_srch, 0);
-    printstack(outstack);
+    if (pat_srch == 0) printstack(outstack);
     freestack(outstack);
     return 0;
 }
@@ -37,22 +37,20 @@ int _ls2(struct stack_t *outstack, char *path, char *pattern, int pat_srch, int 
         full_path = (char*) malloc(strlen(path) + strlen(dp->d_name) + 20);
         sprintf(full_path, "%s/%s", path, dp->d_name);
         lstat(full_path, &buf);
-        if (S_ISREG(buf.st_mode)) { // regular file
-            if (pat_srch && strcmp(dp->d_name, pattern) == 0) {
-                closedir(dirp);
-                return 1;
-            } else if (!pat_srch) {
-                str= (char*) malloc((strlen(INDENT) * lvl) + strlen(dp->d_name) + 20);
-                sprintf(str, "%s (%jd bytes)", dp->d_name, buf.st_size);
-                _indent(str, lvl);
-                push(outstack, str);
-            }
-        } else if (S_ISDIR(buf.st_mode)) { // folder
+        if (S_ISDIR(buf.st_mode)) { // folder
             str = (char*) malloc((strlen(INDENT) * lvl) + strlen(dp->d_name) + 20);
             sprintf(str, "%s/ (directory)", dp->d_name);
             _indent(str, lvl);
             push(outstack, str);
             _ls2(outstack, full_path, pattern, pat_srch, lvl + 1);
+        } else if (S_ISREG(buf.st_mode)) { // regular file
+            str = (char*) malloc((strlen(INDENT) * lvl) + strlen(dp->d_name) + 20);
+            sprintf(str, "%s (%jd bytes)", dp->d_name, buf.st_size);
+            _indent(str, lvl);
+            if (pat_srch == 1 && strcmp(dp->d_name, pattern) == 0) {
+                printstack(outstack);
+                push(outstack, str);
+            } else if (pat_srch == 0) push(outstack, str);
         }
     }
     closedir(dirp);
