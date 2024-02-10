@@ -3,10 +3,12 @@
 
 #include "stack.h"
 
-#define TRUE 1
+#define TRUE  1
 #define FALSE 0
 #define INDENT "    "
 
-// TODO: Function declarations here for ls2
+int ls2(char *path, char *pattern, int pat_srch);
+int _ls2(struct stack_t *outstack, char *path, char *pattern, int pat_srch, int lvl);
+int readpath(char *path);
 
 #endif

@@ -3,22 +3,20 @@
 #include "stack.h"
 #include "ls2.h"
 
-/**
- * Main function
- * Usage: ls2 <path> [exact-match-pattern]
- */
 int main(int argc, char* argv[]) {
-	// stack stores the lines to print out
-	stack_t *s = initstack();
+    if (argc < 2 || argc > 3) {
+        printf("Usage: ./ls2 <path> [exact-match-pattern]\n");
+        return 1;
+    }
+    int check;
 
-	push(s, "Hello1");
-	push(s, "Hello2");
-	push(s, "Hello3");
+    if (argc == 3) check = ls2(argv[1], argv[2], 1);
+    else check = ls2(argv[1], "", 0);
 
-	// print stack
-	printstack(s);
+    if (check) {
+        printf("Invalid path\n");
+        return 1;
+    }
 
-	// free up stack
-	freestack(s);
-	return 0;
+    return 0;
 }
